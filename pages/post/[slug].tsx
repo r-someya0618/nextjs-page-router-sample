@@ -1,5 +1,9 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { getPosts, getPostContents, Post } from '..';
+import { Layout } from '@/lib/component/Layout';
+import { PostComponent } from '@/lib/component/Post';
+import { useEffect } from 'react';
+import prism from 'prismjs';
 
 type StaticPathsParams = {
   slug: string;
@@ -58,8 +62,15 @@ export const getStaticPaths: GetStaticPaths<StaticPathsParams> = async () => {
 };
 
 const PostPage: NextPage<StaticProps> = ({ post }) => {
+  useEffect(() => {
+    prism.highlightAll();
+  }, []);
   if (!post) return null;
-  return <div>{JSON.stringify(post)}</div>;
+  return (
+    <Layout>
+      <PostComponent post={post} key={post.id} />
+    </Layout>
+  );
 };
 
 export default PostPage;
